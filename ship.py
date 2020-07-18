@@ -32,9 +32,9 @@ class Ship:
         """
         * Updates the position of the ship. *
         """
-        if self.move_right:
+        if self.move_right and self.rect.right < self.screen_rect.right:
             self.x += self.settings.ship_speed
-        elif self.move_left:
+        elif self.move_left and self.rect.left > self.screen_rect.left:
             self.x -= self.settings.ship_speed
 
         # Update rect from self.x
