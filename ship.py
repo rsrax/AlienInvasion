@@ -18,10 +18,11 @@ class Ship:
         self.image = pygame.image.load("./images/ship.bmp")
         self.rect = self.image.get_rect()
 
-        # Store a decimal value for the ship's horizontal position
-        self.x = float(self.rect.x)
         # Ship starts at the middle of the bottom of the screen
         self.rect.midbottom = self.screen_rect.midbottom
+
+        # Store a decimal value for the ship's horizontal position
+        self.x = float(self.rect.x)
 
         # Movement Flags
         self.move_right = False
