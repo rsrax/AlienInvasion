@@ -2,6 +2,7 @@ import sys
 import pygame
 from settings import Settings
 from ship import Ship
+import ctypes
 
 
 class AlienInvasion:
@@ -15,8 +16,12 @@ class AlienInvasion:
         """
         pygame.init()
         self.settings = Settings()
-        self.screen = pygame.display.set_mode(
-            (self.settings.screen_width, self.settings.screen_height))
+        ctypes.windll.user32.SetProcessDPIAware()
+        true_res = (ctypes.windll.user32.GetSystemMetrics(0),
+                    ctypes.windll.user32.GetSystemMetrics(1))
+        self.screen = pygame.display.set_mode(true_res, pygame.FULLSCREEN)
+        self.settings.screen_width = true_res[0]
+        self.settings.screen_height = true_res[1]
         pygame.display.set_caption("Alien Invasion")
         self.ship = Ship(self)
 
