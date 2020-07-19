@@ -17,11 +17,9 @@ class AlienInvasion:
         pygame.init()
         self.settings = Settings()
         ctypes.windll.user32.SetProcessDPIAware()
-        true_res = (ctypes.windll.user32.GetSystemMetrics(0),
-                    ctypes.windll.user32.GetSystemMetrics(1))
-        self.screen = pygame.display.set_mode(true_res, pygame.FULLSCREEN)
-        self.settings.screen_width = true_res[0]
-        self.settings.screen_height = true_res[1]
+        self.screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
+        self.settings.screen_width = self.screen.get_rect().width
+        self.settings.screen_height = self.screen.get_rect().height
         pygame.display.set_caption("Alien Invasion")
         self.ship = Ship(self)
 
