@@ -21,7 +21,7 @@ class AlienInvasion:
         self.screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
         self.settings.screen_width = self.screen.get_rect().width
         self.settings.screen_height = self.screen.get_rect().height
-        pygame.display.set_caption("Alien Invasion")
+        pygame.display.set_caption("Space Shooter")
         self.ship = Ship(self)
         self.bullets = pygame.sprite.Group()
 
@@ -68,8 +68,19 @@ class AlienInvasion:
 
     def _fire_bullet(self):
         """ Create a new bullet and add it to the bullets group """
-        new_bullet = Bullet(self)
-        self.bullets.add(new_bullet)
+        if len(self.bullets) < self.settings.bullets_allowed:
+            new_bullet = Bullet(self)
+            self.bullets.add(new_bullet)
+
+    def _update_bullets(self):
+        """ Update position of the bullets and get rid of old bullets. """
+        # Update bullet positions
+        self.bullets.update()
+
+        # Get rid of bullets that have disappeared from the screen
+        for bullet in self.bullets.copy():
+            if bullet.rect.bottom <= 0:
+                self.bullets.remove(bullet)
 
     def run_game(self):
         """ 
@@ -78,7 +89,7 @@ class AlienInvasion:
         while True:
             self._check_events()
             self.ship.update()
-            self.bullets.update()
+            self._update_bullets()
             self._update_screen()
 
 
