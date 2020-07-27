@@ -106,9 +106,9 @@ class AlienInvasion:
     def _fire_bullet(self):
         """ Create a new bullet and add it to the bullets group """
         if len(self.bullets) < self.settings.bullets_allowed:
+            self.ship.bullet_sound.play()
             new_bullet = Bullet(self)
             self.bullets.add(new_bullet)
-            pygame.mixer.Sound.play(self.ship.bullet_sound)
 
     def _update_bullets(self):
         """ Update position of the bullets and get rid of old bullets. """
