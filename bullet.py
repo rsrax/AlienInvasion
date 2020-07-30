@@ -11,6 +11,9 @@ class Bullet(Sprite):
         self.screen = ai_game.screen
         self.settings = ai_game.settings
         self.color = self.settings.bullet_color
+        # Load bullet SFX and play the sound for every bullet created
+        self.bullet_sound = pygame.mixer.Sound("./sounds/PewPew.wav")
+        self.bullet_sound.play()
         # Create a bullet at (0,0) and then set the correct position
         self.rect = pygame.Rect(
             0, 0, self.settings.bullet_width, self.settings.bullet_height)

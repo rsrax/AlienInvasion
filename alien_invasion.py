@@ -100,14 +100,16 @@ class AlienInvasion:
         pygame.display.flip()
 
     def _update_aliens(self):
-        """ Update the position of all aliens in the fleet. """
+        """ 
+            1. Check if the fleet is at an edge
+            2. Update the position of all aliens in the fleet.
+        """
         self._check_fleet_edges()
         self.aliens.update()
 
     def _fire_bullet(self):
         """ Create a new bullet and add it to the bullets group """
         if len(self.bullets) < self.settings.bullets_allowed:
-            self.ship.bullet_sound.play()
             new_bullet = Bullet(self)
             self.bullets.add(new_bullet)
 
@@ -115,6 +117,11 @@ class AlienInvasion:
         """ Update position of the bullets and get rid of old bullets. """
         # Update bullet positions
         self.bullets.update()
+
+        # Check for any bullets that have hit an alien
+        # If so, get rid of the alien and the bullet
+        collisions = pygame.sprite.groupcollide(
+            self.bullets, self.aliens, True, True)
 
         # Get rid of bullets that have disappeared from the screen
         for bullet in self.bullets.copy():
