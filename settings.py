@@ -1,3 +1,6 @@
+import pygame
+
+
 class Settings:
     """ 
     * A class to store all the settings for Alien Invasion. *
@@ -7,9 +10,13 @@ class Settings:
         """
         * Initialize the game's settings. *
         """
+        pygame.init()
+        # Start Menu
+        self.show_menu = True
+
         # Screen settings
-        self.screen_width = 1920
-        self.screen_height = 1080
+        self.screen_width = pygame.display.Info().current_w
+        self.screen_height = pygame.display.Info().current_h
         self.bg_color = (0, 0, 0)
 
         # Ship settings
