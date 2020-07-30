@@ -117,7 +117,11 @@ class AlienInvasion:
         """ Update position of the bullets and get rid of old bullets. """
         # Update bullet positions
         self.bullets.update()
-
+        # Collision sound, DIE ALIEN!
+        for bullet in self.bullets.sprites():
+            for alien in self.aliens.sprites():
+                if bullet.rect.colliderect(alien.rect):
+                    bullet.boom_sound.play()
         # Check for any bullets that have hit an alien
         # If so, get rid of the alien and the bullet
         collisions = pygame.sprite.groupcollide(
