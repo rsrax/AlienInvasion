@@ -15,7 +15,7 @@ class Ship:
         self.settings = ai_game.settings
         self.bullet_sound = pygame.mixer.Sound("./sounds/PewPew.wav")
         # Load the ship image and get its rectangle
-        self.image = pygame.image.load("./images/ship.bmp")
+        self.image = pygame.image.load("./images/ship.bmp").convert()
         self.rect = self.image.get_rect()
 
         # Ship starts at the middle of the bottom of the screen
