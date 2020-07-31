@@ -8,6 +8,7 @@ from ship import Ship
 from bullet import Bullet
 from alien import Alien
 from game_stats import GameStats
+from menu import Menu
 
 
 class AlienInvasion:
@@ -28,7 +29,7 @@ class AlienInvasion:
         pygame.display.set_caption("Space Shooter")
         self.background_image = pygame.image.load(
             "./images/BG.png").convert()
-
+        self.mainmenu = Menu(self)
         # Create an instance to store the game statistics
         self.stats = GameStats(self)
 
@@ -148,6 +149,7 @@ class AlienInvasion:
             for alien in self.aliens.sprites():
                 if bullet.rect.colliderect(alien.rect):
                     bullet.boom_sound.play()
+                    self.settings.alien_speed += 0.0025
         # Check for any bullets that have hit an alien
         # If so, get rid of the alien and the bullet
         collisions = pygame.sprite.groupcollide(
@@ -205,12 +207,22 @@ class AlienInvasion:
         * Start the main loop for the game. *
         """
         while True:
-            self._check_events()
-            if self.stats.game_active:
-                self.ship.update()
-                self._update_bullets()
-                self._update_aliens()
-            self._update_screen()
+            if self.settings.show_menu:
+                self.mainmenu.main_menu()
+                self.settings.show_menu = self.mainmenu.show_menu
+                self.stats.game_active = self.mainmenu.game_active
+                if not self.settings.show_menu:
+                    continue
+            else:
+                self._check_events()
+                if self.stats.game_active:
+                    self.ship.update()
+                    self._update_bullets()
+                    self._update_aliens()
+                else:
+                    self.settings.show_menu = True
+                    continue
+                self._update_screen()
 
 
 if __name__ == '__main__':
