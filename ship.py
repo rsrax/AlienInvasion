@@ -1,7 +1,8 @@
 import pygame
+from pygame.sprite import Sprite
 
 
-class Ship:
+class Ship(Sprite):
     """
     * A class to manage the ship *
     """
@@ -10,6 +11,7 @@ class Ship:
         """
         * Initialize the ship and its starting position. *
         """
+        super().__init__()
         self.screen = ai_game.screen
         self.screen_rect = ai_game.screen.get_rect()
         self.settings = ai_game.settings
