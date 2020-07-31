@@ -9,6 +9,8 @@ class Menu:
         self.screen = ai_game.screen
         self.screen_rect = ai_game.screen.get_rect()
 
+        self.background_image = pygame.image.load(
+            "./images/background.png").convert_alpha()
         self.logo = pygame.image.load(
             "./images/alien_invasion.png").convert_alpha()
         self.logo_rect = self.logo.get_rect()
@@ -42,10 +44,16 @@ class Menu:
         self.play_button_selected_rect = self.play_button_rect
         self.exit_button_selected_rect = self.exit_button_rect
 
+        # Main Menu Music
+        pygame.mixer.music.load('./sounds/Theme.wav')
+
     def main_menu(self):
+        if not pygame.mixer.music.get_busy():
+            pygame.mixer.music.play(-1)
         self.show_menu = True
         self.game_active = False
         self.screen.fill((0, 0, 0))
+        self.screen.blit(self.background_image, [0, 0])
         self.screen.blit(self.logo, self.logo_rect)
         self._check_events()
         self._update_menu()
@@ -79,6 +87,7 @@ class Menu:
                     sys.exit()
                 elif event.key == pygame.K_RETURN:
                     if self.selected_index == 1:
+                        pygame.mixer.music.fadeout(1500)
                         self.show_menu = False
                         self.game_active = True
                     else:

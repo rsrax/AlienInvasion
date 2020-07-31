@@ -38,6 +38,9 @@ class AlienInvasion:
         self.aliens = pygame.sprite.Group()
         self._create_fleet()
 
+        self.game_over_sound = pygame.mixer.Sound("./sounds/game_over.wav")
+        self.level_lost_sound = pygame.mixer.Sound("./sounds/Lose.wav")
+
     def _create_fleet(self):
         """ Create the fleet of aliens """
         # Create an alien and find the number of aliens in a row
@@ -149,7 +152,7 @@ class AlienInvasion:
             for alien in self.aliens.sprites():
                 if bullet.rect.colliderect(alien.rect):
                     bullet.boom_sound.play()
-                    self.settings.alien_speed += 0.0025
+                    self.settings.alien_speed += 0.005
         # Check for any bullets that have hit an alien
         # If so, get rid of the alien and the bullet
         collisions = pygame.sprite.groupcollide(
@@ -159,6 +162,7 @@ class AlienInvasion:
             # Destroy existing bullets and create new fleet.
             self.bullets.empty()
             self._create_fleet()
+            self.settings.increase_speed()
 
     def _check_fleet_edges(self):
         """ Respond appropriately if any aliens have reached the edges """
@@ -188,9 +192,14 @@ class AlienInvasion:
             self._create_fleet()
             self.ship.center_ship()
 
+            # Crash sound.
+            pygame.mixer.Sound.play(self.level_lost_sound)
+
             # Pause.
             sleep(0.75)
         else:
+            pygame.mixer.Sound.play(self.game_over_sound)
+            sleep(4.5)
             self.stats.game_active = False
 
     def _check_alien_bottom(self):
@@ -212,7 +221,15 @@ class AlienInvasion:
                 self.settings.show_menu = self.mainmenu.show_menu
                 self.stats.game_active = self.mainmenu.game_active
                 if not self.settings.show_menu:
-                    continue
+                    self.settings.initialize_dynamic_settings()
+                    self.stats.reset_status()
+                    # Get rid of any remaining aliens and bullets.
+                    self.aliens.empty()
+                    self.bullets.empty()
+
+                    # Create a new fleet and center the ship.
+                    self._create_fleet()
+                    self.ship.center_ship()
             else:
                 self._check_events()
                 if self.stats.game_active:
