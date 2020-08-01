@@ -56,7 +56,7 @@ class Scoreboard:
 
         # Position the level below the score.
         self.level_rect = self.level_image.get_rect()
-        self.level_rect.right = self.screen_rect.right
+        self.level_rect.x = self.score_rect.x
         self.level_rect.top = self.score_rect.bottom + 10
 
     def prep_ships(self):
@@ -89,5 +89,5 @@ class Scoreboard:
             high_score_file.write(str(self.stats.high_score))
             high_score_file.close()
         except IOError:
-            # Hm, can't write it.
+            # Hmm, can't write it.
             pass

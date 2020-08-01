@@ -30,11 +30,11 @@ class AlienInvasion:
         pygame.display.set_caption("Alien Invasion")
         self.background_image = pygame.image.load(
             "./images/BG.png").convert()
-        self.mainmenu = Menu(self)
         # Create an instance to store the game statistics
         # And create a scoreboard.
         self.stats = GameStats(self)
         self.sb = Scoreboard(self)
+        self.mainmenu = Menu(self)
 
         self.ship = Ship(self)
         self.bullets = pygame.sprite.Group()
@@ -43,6 +43,8 @@ class AlienInvasion:
 
         self.game_over_sound = pygame.mixer.Sound("./sounds/game_over.wav")
         self.level_lost_sound = pygame.mixer.Sound("./sounds/Lose.wav")
+
+        self.previous_time = 0
 
     def _create_fleet(self):
         """ Create the fleet of aliens """
@@ -74,6 +76,7 @@ class AlienInvasion:
 
     def _check_events(self):
         # Watch for keyboard and mouse events.
+        current_time = pygame.time.get_ticks()
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 sys.exit()
@@ -81,6 +84,10 @@ class AlienInvasion:
                 self._check_keydown_events(event)
             elif event.type == pygame.KEYUP:
                 self._check_keyup_events(event)
+        if self.ship.shoot_bullets:
+            if current_time - self.previous_time > 400:
+                self.previous_time = current_time
+                self._fire_bullet()
 
     def _check_keydown_events(self, event):
         """ 
@@ -92,8 +99,11 @@ class AlienInvasion:
             self.ship.move_left = True
         elif event.key == pygame.K_q:
             sys.exit()
+        elif event.key == pygame.K_ESCAPE:
+            self.stats.game_active = False
+            self.settings.show_menu = True
         elif event.key == pygame.K_SPACE:
-            self._fire_bullet()
+            self.ship.shoot_bullets = True
 
     def _check_keyup_events(self, event):
         """ 
@@ -103,6 +113,8 @@ class AlienInvasion:
             self.ship.move_right = False
         elif event.key == pygame.K_LEFT:
             self.ship.move_left = False
+        elif event.key == pygame.K_SPACE:
+            self.ship.shoot_bullets = False
 
     def _update_screen(self):
         # Redraw the screen after each pass.
